@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= dev.fullName %>'s DevTag</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Righteous&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @font-face {
+        font-family: "Ruigslay";
+        src: url("/fonts/Ruigslay.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Byte Sharp";
+        src: url("/fonts/Byte Sharp.otf") format("opentype");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      body {
+        font-family: "poppins", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #0a0a0a 0%,
+          #1a1a1a 50%,
+          #0f0f0f 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        overflow-x: hidden;
+      }
+
+      /* Animated background */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 20% 80%,
+            rgba(120, 119, 198, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 119, 198, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 40%,
+            rgba(120, 219, 255, 0.1) 0%,
+            transparent 50%
+          );
+        animation: gradientShift 15s ease infinite;
+        z-index: -1;
+      }
+
+      @keyframes gradientShift {
+        0%,
+        100% {
+          transform: translateX(0) translateY(0);
+        }
+        25% {
+          transform: translateX(20px) translateY(-10px);
+        }
+        50% {
+          transform: translateX(-10px) translateY(15px);
+        }
+        75% {
+          transform: translateX(10px) translateY(-5px);
+        }
+      }
+
+      .dev-card {
+        background: rgba(15, 15, 15, 0.4);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 1.2rem 2.5rem 2.5rem 2.5rem;
+        width: 100%;
+        max-width: 420px;
+        position: relative;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+          inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+
+      .dev-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+      }
+
+      .dev-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5),
+          inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      }
+
+      .profile-section {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .profile-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        margin: 0 auto 1.5rem;
+        display: block;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .profile-image:hover {
+        transform: scale(1.05);
+        border-color: rgba(120, 219, 255, 0.3);
+      }
+
+      .developer-name {
+        font-family: "Ruigslay", monospace;
+        font-size: 1.7rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        letter-spacing: 1px;
+        /* margin-bottom: 0.8rem; */
+        background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+        white-space: nowrap;
+      }
+
+      .developer-name i {
+        font-size: 0.9em;
+        color: #78dbff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .tagline {
+        font-family: "Righteous";
+        font-size: 1rem;
+        color: #78dbff;
+        margin-bottom: 1rem;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        opacity: 0.9;
+      }
+
+      .bio {
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        font-weight: 300;
+      }
+
+      .skills-container {
+        margin-bottom: 2rem;
+      }
+
+      .skills-title {
+        font-size: 1.1rem;
+        color: #ffffff;
+        margin-bottom: 4px;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+      }
+
+      .skill-tag {
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .skill-tag::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .skill-tag:hover::before {
+        left: 100%;
+      }
+
+      .skill-tag:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Different colors for skill tags */
+      .skill-tag:nth-child(1) {
+        background: rgba(255, 99, 132, 0.15);
+        color: #ff6384;
+        border-color: rgba(255, 99, 132, 0.3);
+      }
+      .skill-tag:nth-child(2) {
+        background: rgba(54, 162, 235, 0.15);
+        color: #36a2eb;
+        border-color: rgba(54, 162, 235, 0.3);
+      }
+      .skill-tag:nth-child(3) {
+        background: rgba(255, 206, 86, 0.15);
+        color: #ffce56;
+        border-color: rgba(255, 206, 86, 0.3);
+      }
+      .skill-tag:nth-child(4) {
+        background: rgba(75, 192, 192, 0.15);
+        color: #4bc0c0;
+        border-color: rgba(75, 192, 192, 0.3);
+      }
+      .skill-tag:nth-child(5) {
+        background: rgba(153, 102, 255, 0.15);
+        color: #9966ff;
+        border-color: rgba(153, 102, 255, 0.3);
+      }
+      .skill-tag:nth-child(6) {
+        background: rgba(255, 159, 64, 0.15);
+        color: #ff9f40;
+        border-color: rgba(255, 159, 64, 0.3);
+      }
+      .skill-tag:nth-child(7) {
+        background: rgba(199, 199, 199, 0.15);
+        color: #c7c7c7;
+        border-color: rgba(199, 199, 199, 0.3);
+      }
+      .skill-tag:nth-child(8) {
+        background: rgba(83, 102, 255, 0.15);
+        color: #5366ff;
+        border-color: rgba(83, 102, 255, 0.3);
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .social-link {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .social-link::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transition: all 0.4s ease;
+        transform: translate(-50%, -50%);
+      }
+
+      .social-link:hover::before {
+        width: 100%;
+        height: 100%;
+      }
+
+      .social-link:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .btn {
+        padding: 0.8rem 1.5rem;
+        border-radius: 12px;
+        border: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .btn:hover::before {
+        left: 100%;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .share-section {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .share-input {
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        color: #ffffff;
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .share-input:focus {
+        outline: none;
+        border-color: rgba(120, 219, 255, 0.5);
+        box-shadow: 0 0 0 2px rgba(120, 219, 255, 0.1);
+      }
+
+      .share-label {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-align: center;
+        display: block;
+        margin-bottom: 1rem;
+      }
+
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1.2rem;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+      }
+
+      .back-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .dev-card {
+          padding: 1.5rem;
+          max-width: 350px;
+          margin: 10px;
+        }
+
+        .developer-name {
+          font-size: 1.8rem;
+        }
+
+        .profile-image {
+          width: 100px;
+          height: 100px;
+        }
+
+        .social-links {
+          gap: 0.8rem;
+        }
+
+        .social-link {
+          width: 40px;
+          height: 40px;
+          font-size: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 10px;
+        }
+
+        .dev-card {
+          padding: 1.2rem;
+          max-width: 90%;
+        }
+
+        .developer-name {
+          font-size: 1.6rem;
+        }
+
+        .profile-image {
+          width: 100px;
+          height: 100px;
+          margin: 10px auto 0.8rem;
+        }
+
+        .skills {
+          gap: 0.3rem;
+        }
+
+        .skill-tag {
+          font-size: 0.75rem;
+          padding: 0.3rem 0.6rem;
+        }
+
+        .social-links {
+          gap: 0.6rem;
+        }
+
+        .social-link {
+          width: 35px;
+          height: 35px;
+          font-size: 0.9rem;
+        }
+      }
+
+      /* Animation for card entrance */
+      @keyframes cardEntrance {
+        0% {
+          opacity: 0;
+          transform: translateY(30px) scale(0.95);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .dev-card {
+        animation: cardEntrance 0.8s ease-out;
+      }
+
+      .slash {
+        color: #78dbff;
+        font-size: 1.8em;
+        margin: 0 0.1rem;
+      }
+      .underline-glow {
+        width: 60px; /* adjust width here */
+        height: 3px;
+        background: #78dbff;
+        border-radius: 4px;
+        margin: 0 auto 1.2rem auto;
+        box-shadow: 0 0 8px rgba(120, 219, 255, 0.5);
+        animation: glowPulse 2s infinite ease-in-out;
+      }
+
+      @keyframes glowPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 6px rgba(120, 219, 255, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 10px rgba(120, 219, 255, 0.7);
+        }
+      }
+      .brand-logo {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: rgb(133, 133, 133);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dev-card">
+      <div class="brand-logo">&lt;dev/&gt;</div>
+      <div class="profile-section">
+        <% if (dev.profilePicture) { %>
+        <img
+          src="/uploads/<%= dev.profilePicture %>"
+          alt="Profile Picture"
+          class="profile-image"
+        />
+        <% } else { %>
+        <img
+          src="https://via.placeholder.com/120x120?text=No+Image"
+          alt="Default Profile"
+          class="profile-image"
+        />
+        <% } %>
+        <h1 class="developer-name">
+          <i class="fas fa-angle-left"></i>
+          <%= dev.fullName %>
+          <span class="slash">/</span><i class="fas fa-angle-right"></i>
+        </h1>
+
+        <p class="tagline">
+          <%= dev.tagline === "custom" ? dev.customTagline : dev.tagline %>
+        </p>
+
+        <% if (dev.bio) { %>
+        <p class="bio"><%= dev.bio %></p>
+        <% } %>
+      </div>
+
+      <% if (dev.skills.length > 0) { %>
+      <div class="skills-container">
+        <h3 class="skills-title">Tech Stack</h3>
+        <div class="underline-glow"></div>
+        <div class="skills">
+          <% dev.skills.forEach(skill => { %>
+          <span class="skill-tag"><%= skill %></span>
+          <% }) %>
+        </div>
+      </div>
+      <% } %>
+
+      <div class="social-links">
+        <% if (dev.github) { %>
+        <a
+          href="<%= dev.github %>"
+          class="social-link"
+          title="GitHub"
+          target="_blank"
+        >
+          <i class="fab fa-github"></i>
+        </a>
+        <% } %> <% if (dev.linkedin) { %>
+        <a
+          href="<%= dev.linkedin %>"
+          class="social-link"
+          title="LinkedIn"
+          target="_blank"
+        >
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <% } %> <% if (dev.twitter) { %>
+        <a
+          href="<%= dev.twitter %>"
+          class="social-link"
+          title="Twitter"
+          target="_blank"
+        >
+          <i class="fab fa-twitter"></i>
+        </a>
+        <% } %> <% if (dev.portfolio) { %>
+        <a
+          href="<%= dev.portfolio %>"
+          class="social-link"
+          title="Portfolio"
+          target="_blank"
+        >
+          <i class="fas fa-globe"></i>
+        </a>
+        <% } %>
+      </div>
+
+      <div class="action-buttons">
+        <% if (dev.resume) { %>
+        <a href="/uploads/<%= dev.resume %>" class="btn btn-primary" download>
+          <i class="fas fa-download"></i> Download Resume
+        </a>
+        <% } %>
+        <button
+          class="btn btn-secondary"
+          id="copyBtn"
+          data-link="http://localhost:3000/<%= dev._id %>"
+        >
+          <i class="fas fa-share"></i> Copy Share Link
+        </button>
+      </div>
+
+      <!-- <div class="share-section">
+      <input type="text" class="share-input" id="shareLink" value="http://localhost:3000/devtag/<%= dev._id %>" readonly />
+      <label class="share-label">Click to copy your shareable link</label>
+    </div>
+
+    <a href="/" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Back to Home
+    </a> -->
+    </div>
+
+    <script>
+      document.getElementById("copyBtn").addEventListener("click", function () {
+        const link = this.getAttribute("data-link");
+
+        // Use Clipboard API if supported
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(link).then(() => {
+            const original = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            this.style.background =
+              "linear-gradient(135deg, #10b981 0%, #059669 100%)";
+
+            setTimeout(() => {
+              this.innerHTML = original;
+              this.style.background = "";
+            }, 2000);
+          });
+        } else {
+          // Fallback for older browsers
+          const textarea = document.createElement("textarea");
+          textarea.value = link;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevTag Generator</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: poppins;
+    }
+
+    body {
+      font-family: "poppins";
+      line-height: 1.6;
+      transition: all 0.5s ease;
+    }
+
+    /* Theme Variables */
+    :root {
+      --bg-gradient: linear-gradient(
+        135deg,
+        #f0f9ff 0%,
+        #e0e7ff 50%,
+        #f3e8ff 100%
+      );
+      --card-bg: rgba(255, 255, 255, 0.8);
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --text-muted: #9ca3af;
+      --border-color: #d1d5db;
+      --input-bg: #f9fafb;
+      --input-focus-bg: #ffffff;
+      --brand-gradient: linear-gradient(135deg, #7c3aed, #ec4899);
+      --accent-gradient: linear-gradient(135deg, #8b5cf6, #ec4899);
+    }
+
+    .dark-theme {
+      --bg-gradient: linear-gradient(
+        135deg,
+        #0f172a 0%,
+        #581c87 50%,
+        #0f172a 100%
+      );
+      --card-bg: rgba(255, 255, 255, 0.1);
+      --text-primary: #ffffff;
+      --text-secondary: #d1d5db;
+      --text-muted: #9ca3af;
+      --border-color: #4b5563;
+      --input-bg: rgba(255, 255, 255, 0.1);
+      --input-focus-bg: rgba(255, 255, 255, 0.2);
+      --brand-gradient: linear-gradient(135deg, #22d3ee, #a855f7);
+      --accent-gradient: linear-gradient(135deg, #7c3aed, #ec4899);
+    }
+
+    /* App Container */
+    .app-container {
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      position: relative;
+      transition: all 0.5s ease;
+    }
+
+    .background-pattern {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+          circle at 25% 25%,
+          rgba(156, 146, 172, 0.1) 0%,
+          transparent 50%
+        ),
+        radial-gradient(
+          circle at 75% 75%,
+          rgba(139, 92, 246, 0.1) 0%,
+          transparent 50%
+        );
+      background-size: 60px 60px;
+      opacity: 0.5;
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .brand-logo {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: var(--brand-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .brand-badge {
+      background: var(--text-muted);
+      color: var(--text-primary);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .main-title {
+      font-size: 50px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .main-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 42rem;
+      margin: 0 auto;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 2rem;
+    }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .theme-icon {
+      width: 1rem;
+      height: 1rem;
+      color: var(--text-muted);
+      transition: color 0.3s ease;
+    }
+
+    .dark-theme .moon-icon {
+      color: #a855f7;
+    }
+
+    .app-container:not(.dark-theme) .sun-icon {
+      color: #f59e0b;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 3rem;
+      height: 1.5rem;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 1.5rem;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 1.125rem;
+      width: 1.125rem;
+      left: 0.1875rem;
+      bottom: 0.1875rem;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #7c3aed;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(1.5rem);
+    }
+
+    /* Form Card */
+    .form-card {
+      backdrop-filter: blur(16px);
+      background: var(--card-bg);
+      border-radius: 1.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    .card-header {
+      text-align: center;
+      padding: 2rem 2rem 0;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .card-title i {
+      color: #a855f7;
+    }
+
+    .card-content {
+      padding: 2rem;
+    }
+
+    /* Form Styles */
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .form-label {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      height: 3rem;
+      padding: 0 1rem;
+      border: none;
+      border-radius: 0.75rem;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      font-size: 1.125rem;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      background: var(--input-focus-bg);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-textarea {
+      height: auto;
+      padding: 1rem;
+      resize: none;
+      font-family: inherit;
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Upload Areas */
+    .upload-area {
+      position: relative;
+      border: 2px dashed var(--border-color);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .upload-area:hover {
+      border-color: #a855f7;
+      background: rgba(168, 85, 247, 0.05);
+    }
+
+    .upload-area.drag-active {
+      border-color: #a855f7;
+      background: rgba(168, 85, 247, 0.1);
+    }
+
+    .upload-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .upload-icon {
+      width: 5rem;
+      height: 5rem;
+      border: 2px dashed var(--border-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--text-muted);
+    }
+
+    .upload-icon-small {
+      font-size: 2rem;
+      color: var(--text-muted);
+    }
+
+    .upload-title {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .upload-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .upload-preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .preview-avatar {
+      width: 5rem;
+      height: 5rem;
+      border-radius: 50%;
+      background: var(--accent-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2.5rem;
+    }
+
+    .preview-name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .resume-upload {
+      padding: 1.5rem;
+    }
+
+    .resume-icon {
+      color: #10b981;
+      font-size: 1.5rem;
+      margin-right: 0.75rem;
+    }
+
+    .resume-name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    /* Skills Section */
+    .skills-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .skills-counter {
+      background: rgba(168, 85, 247, 0.1);
+      color: #a855f7;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
+
+    .skills-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .skill-input-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      position: relative;
+    }
+
+    .skill-input {
+      flex: 1;
+    }
+
+    .remove-skill-btn {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 0.375rem;
+      opacity: 0;
+      transition: all 0.2s ease;
+    }
+
+    .skill-input-group:hover .remove-skill-btn {
+      opacity: 1;
+    }
+
+    .remove-skill-btn:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .add-skill-btn {
+      width: 100%;
+      height: 3rem;
+      border: 2px dashed var(--border-color);
+      background: none;
+      color: var(--text-primary);
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .add-skill-btn:hover {
+      border-color: #a855f7;
+      background: rgba(168, 85, 247, 0.05);
+    }
+
+    /* Social Links */
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .social-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .social-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Separator */
+    .separator {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      margin: 1rem 0;
+    }
+
+    .dark-theme .separator {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .app-container:not(.dark-theme) .separator {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    /* Submit Button */
+    .submit-container {
+      padding-top: 1.5rem;
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 3.5rem;
+      background: var(--accent-gradient);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 20px 40px -10px rgba(168, 85, 247, 0.4);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .submit-btn.loading {
+      pointer-events: none;
+    }
+
+    .submit-btn .fa-spinner {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 3rem;
+    }
+
+    .footer-text {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--brand-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      background: #10b981;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+      transform: translateX(100%);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .card-content {
+        padding: 1.5rem;
+      }
+
+      .social-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .theme-toggle-container {
+        justify-content: center;
+      }
+
+      .main-title {
+        font-size: 2.5rem;
+      }
+
+      .main-subtitle {
+        font-size: 1.125rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .upload-area {
+        padding: 1.5rem;
+      }
+
+      .upload-icon {
+        width: 4rem;
+        height: 4rem;
+        font-size: 1.5rem;
+      }
+
+      .preview-avatar {
+        width: 4rem;
+        height: 4rem;
+        font-size: 2rem;
+      }
+      .brand-logo {
+        font-size: 2rem;
+      }
+      .main-title {
+        font-size: 2rem;
+        line-height: 1.2;
+      }
+      .brand-container {
+        margin-top: 15px;
+      }
+      .main-subtitle {
+        font-size: 1rem;
+      }
+      .form-card {
+        backdrop-filter: none;
+      }
+    }
+
+    /* Animation Classes */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-in {
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Dark theme styles */
+    body.dark-theme .form-select,
+    body.dark-theme .form-select option {
+      /* background-color: #1e1e1e; */
+      color: black;
+      border: 1px solid #444;
+    }
+
+    body.dark-theme .form-select:focus {
+      outline: none;
+      border-color: #888;
+      color: white;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+    }
+  </style>
+  <body class="dark-theme">
+    <div class="app-container">
+      <!-- Background Pattern -->
+      <div class="background-pattern"></div>
+
+      <div class="container">
+        <!-- Header -->
+        <header class="header">
+          <div class="brand-container">
+            <div class="brand-logo">&lt;dev/&gt;</div>
+            <span class="brand-badge">Tag Generator</span>
+          </div>
+          <h1 class="main-title">Create Your DevTag</h1>
+          <p class="main-subtitle">
+            Build a stunning developer profile that showcases your skills,
+            personality, and passion for code
+          </p>
+        </header>
+
+        <!-- Theme Toggle -->
+        <div class="theme-toggle-container">
+          <div class="theme-toggle">
+            <i class="fas fa-sun theme-icon sun-icon"></i>
+            <label class="switch">
+              <input type="checkbox" id="themeToggle" checked />
+              <span class="slider"></span>
+            </label>
+            <i class="fas fa-moon theme-icon moon-icon"></i>
+          </div>
+        </div>
+
+        <!-- Main Form Card -->
+        <div class="form-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-sparkles"></i>
+              Personal Information
+            </h2>
+          </div>
+
+          <div class="card-content">
+            <form
+              id="devtagForm"
+              class="form"
+              action="/getdevtag"
+              method="post"
+              enctype="multipart/form-data"
+            >
+              <!-- Profile Picture Upload -->
+              <div class="form-group">
+                <label class="form-label">
+                  <i class="fas fa-camera"></i>
+                  Profile Picture
+                </label>
+                <div class="upload-area" id="profileUpload">
+                  <input
+                    type="file"
+                    id="profileInput"
+                    name="profilePicture"
+                    accept="image/*"
+                    hidden
+                  />
+                  <div class="upload-content" id="uploadContent">
+                    <div class="upload-icon">
+                      <i class="fas fa-camera"></i>
+                    </div>
+                    <div class="upload-text">
+                      <p class="upload-title">
+                        Drop your photo here or click to browse
+                      </p>
+                      <p class="upload-subtitle">PNG, JPG up to 5MB</p>
+                    </div>
+                  </div>
+                  <div
+                    class="upload-preview"
+                    id="uploadPreview"
+                    style="display: none"
+                  >
+                    <div class="preview-avatar">
+                      <i class="fas fa-user"></i>
+                    </div>
+                    <p class="preview-name" id="previewName"></p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Full Name -->
+              <div class="form-group">
+                <label for="fullName" class="form-label">
+                  <i class="fas fa-user"></i>
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  class="form-input"
+                  placeholder="Enter your full name"
+                  required
+                />
+              </div>
+
+              <!-- Tagline -->
+              <div class="form-group">
+                <label for="tagline" class="form-label">
+                  <i class="fas fa-sparkles"></i>
+                  Tagline
+                </label>
+                <select id="tagline" name="tagline" class="form-select">
+                  <option value="">🔥 Choose your dev persona</option>
+                  <option value="React Rockstar ⚛️">React Rockstar ⚛️</option>
+                  <option value="MERN Stack King 👑">MERN Stack King 👑</option>
+                  <option value="JavaScript Ninja 🥷">
+                    JavaScript Ninja 🥷
+                  </option>
+                  <option value="Python Hero 🐍">Python Hero 🐍</option>
+                  <option value="Frontend Wizard ✨">Frontend Wizard ✨</option>
+                  <option value="Backend Beast 💪">Backend Beast 💪</option>
+                  <option value="Full Stack Machine 🤖">
+                    Full Stack Machine 🤖
+                  </option>
+                  <option value="Open Source Champ 💖">
+                    Open Source Champ 💖
+                  </option>
+                  <option value="Bug Slayer 🐞">Bug Slayer 🐞</option>
+                  <option value="Code Commander 🧠">Code Commander 🧠</option>
+                  <option value="Design System Master 🎨">
+                    Design System Master 🎨
+                  </option>
+                  <option value="Database Whisperer 🗃️">
+                    Database Whisperer 🗃️
+                  </option>
+                  <option value="DevOps Dude 🔧">DevOps Dude 🔧</option>
+                  <option value="AI Explorer 🤖">AI Explorer 🤖</option>
+                  <option value="Tech Visionary 🔭">Tech Visionary 🔭</option>
+                  <option value="custom">✨ Write custom tagline</option>
+                </select>
+
+                <input
+                  type="text"
+                  id="customTagline"
+                  name="customTagline"
+                  class="form-input"
+                  placeholder="Write your custom tagline..."
+                  style="display: none"
+                />
+              </div>
+
+              <!-- Bio -->
+              <div class="form-group">
+                <label for="bio" class="form-label">
+                  <i class="fas fa-file-text"></i>
+                  Short Bio
+                </label>
+                <textarea
+                  id="bio"
+                  name="bio"
+                  class="form-textarea"
+                  rows="4"
+                  placeholder="Tell us about yourself in a few sentences..."
+                ></textarea>
+              </div>
+
+              <!-- Skills -->
+              <div class="form-group">
+                <div class="skills-header">
+                  <label class="form-label">
+                    <i class="fas fa-code"></i>
+                    Skills & Technologies
+                  </label>
+                  <span class="skills-counter" id="skillsCounter">Max 8</span>
+                </div>
+                <div class="skills-container" id="skillsContainer">
+                  <div class="skill-input-group">
+                    <input
+                      type="text"
+                      name="skills[]"
+                      class="form-input skill-input"
+                      placeholder="Skill 1 (e.g., React, Python, AWS)"
+                    />
+                  </div>
+                </div>
+                <button type="button" class="add-skill-btn" id="addSkillBtn">
+                  <i class="fas fa-plus"></i>
+                  Add Another Skill
+                </button>
+              </div>
+
+              <div class="separator"></div>
+
+              <!-- Social Links -->
+              <div class="form-group">
+                <label class="form-label">
+                  <i class="fas fa-globe"></i>
+                  Social Links
+                </label>
+                <div class="social-grid">
+                  <div class="social-input-group">
+                    <label for="github" class="social-label">
+                      <i class="fab fa-github"></i>
+                      GitHub
+                    </label>
+                    <input
+                      type="url"
+                      id="github"
+                      name="github"
+                      class="form-input"
+                      placeholder="github.com/username"
+                    />
+                  </div>
+                  <div class="social-input-group">
+                    <label for="linkedin" class="social-label">
+                      <i class="fab fa-linkedin"></i>
+                      LinkedIn
+                    </label>
+                    <input
+                      type="url"
+                      id="linkedin"
+                      name="linkedin"
+                      class="form-input"
+                      placeholder="linkedin.com/in/username"
+                    />
+                  </div>
+                  <div class="social-input-group">
+                    <label for="twitter" class="social-label">
+                      <i class="fab fa-twitter"></i>
+                      Twitter
+                    </label>
+                    <input
+                      type="url"
+                      id="twitter"
+                      name="twitter"
+                      class="form-input"
+                      placeholder="twitter.com/username"
+                    />
+                  </div>
+                  <div class="social-input-group">
+                    <label for="portfolio" class="social-label">
+                      <i class="fas fa-globe"></i>
+                      Portfolio
+                    </label>
+                    <input
+                      type="url"
+                      id="portfolio"
+                      name="portfolio"
+                      class="form-input"
+                      placeholder="yourportfolio.com"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Resume Upload -->
+              <div class="form-group">
+                <label class="form-label">
+                  <i class="fas fa-upload"></i>
+                  Resume (Optional)
+                </label>
+                <div class="upload-area resume-upload" id="resumeUpload">
+                  <input
+                    type="file"
+                    id="resumeInput"
+                    name="resume"
+                    accept=".pdf"
+                    hidden
+                  />
+                  <div class="upload-content" id="resumeUploadContent">
+                    <i class="fas fa-upload upload-icon-small"></i>
+                    <p class="upload-title">Upload your resume</p>
+                    <p class="upload-subtitle">PDF up to 10MB</p>
+                  </div>
+                  <div
+                    class="upload-preview"
+                    id="resumePreview"
+                    style="display: none"
+                  >
+                    <i class="fas fa-file-text resume-icon"></i>
+                    <span class="resume-name" id="resumeName"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="submit-container">
+                <button
+                  type="submit"
+                  class="submit-btn"
+                  name="submit"
+                  id="submitBtn"
+                >
+                  <i class="fas fa-sparkles"></i>
+                  <span id="submitText">Generate My DevTag</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+          <p class="footer-text">Made with ❤️ for developers by developer</p>
+          <div class="footer-brand">&lt;dev/&gt;</div>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast" id="successToast">
+      <i class="fas fa-check-circle"></i>
+      <span>DevTag Created Successfully!</span>
+    </div>
+
+    <script>
+      const themeToggle = document.getElementById("themeToggle");
+      const body = document.body;
+
+      // Check and apply saved theme on load
+      if (localStorage.getItem("theme") === "light") {
+        body.classList.remove("dark-theme");
+        themeToggle.checked = false;
+      } else {
+        body.classList.add("dark-theme");
+        themeToggle.checked = true;
+      }
+
+      // Toggle dark/light mode
+      themeToggle.addEventListener("change", () => {
+        if (themeToggle.checked) {
+          body.classList.add("dark-theme");
+          localStorage.setItem("theme", "dark");
+        } else {
+          body.classList.remove("dark-theme");
+          localStorage.setItem("theme", "light");
+        }
+      });
+      // Profile Image Upload
+      const profileUpload = document.getElementById("profileUpload");
+      const profileInput = document.getElementById("profileInput");
+      const uploadContent = document.getElementById("uploadContent");
+      const uploadPreview = document.getElementById("uploadPreview");
+      const previewName = document.getElementById("previewName");
+
+      profileUpload.addEventListener("click", () => {
+        profileInput.click();
+      });
+
+      profileInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith("image/")) {
+          uploadContent.style.display = "none";
+          uploadPreview.style.display = "flex";
+          previewName.textContent = file.name;
+        }
+      });
+
+      // Resume Upload
+      const resumeUpload = document.getElementById("resumeUpload");
+      const resumeInput = document.getElementById("resumeInput");
+      const resumeUploadContent = document.getElementById(
+        "resumeUploadContent"
+      );
+      const resumePreview = document.getElementById("resumePreview");
+      const resumeName = document.getElementById("resumeName");
+
+      resumeUpload.addEventListener("click", () => {
+        resumeInput.click();
+      });
+
+      resumeInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file && file.type === "application/pdf") {
+          resumeUploadContent.style.display = "none";
+          resumePreview.style.display = "flex";
+          resumeName.textContent = file.name;
+        }
+      });
+
+      // Tagline toggle
+      const taglineSelect = document.getElementById("tagline");
+      const customTaglineInput = document.getElementById("customTagline");
+
+      taglineSelect.addEventListener("change", () => {
+        if (taglineSelect.value === "custom") {
+          customTaglineInput.style.display = "block";
+        } else {
+          customTaglineInput.style.display = "none";
+        }
+      });
+
+      // Add Skill (max 8)
+      const addSkillBtn = document.getElementById("addSkillBtn");
+      const skillsContainer = document.getElementById("skillsContainer");
+
+      addSkillBtn.addEventListener("click", () => {
+        const count = skillsContainer.querySelectorAll(".skill-input").length;
+        if (count >= 8) return;
+
+        const div = document.createElement("div");
+        div.className = "skill-input-group";
+        div.innerHTML = `
+      <input type="text" name="skills[]" class="form-input skill-input" placeholder="Skill ${
+        count + 1
+      }" />
+    `;
+        skillsContainer.appendChild(div);
+      });
+
+      // Initialize the application when DOM is loaded
+      document.addEventListener("DOMContentLoaded", () => {
+        new DevTagGenerator();
+      });
+
+      // Add some utility functions for enhanced UX
+      document.addEventListener("DOMContentLoaded", () => {
+        // Add fade-in animation to form elements
+        const formGroups = document.querySelectorAll(".form-group");
+        formGroups.forEach((group, index) => {
+          group.style.animationDelay = `${index * 0.1}s`;
+          group.classList.add("fade-in");
+        });
+
+        // Add smooth scrolling for better UX
+        document.documentElement.style.scrollBehavior = "smooth";
+
+        // Add focus ring improvements
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Tab") {
+            document.body.classList.add("keyboard-navigation");
+          }
+        });
+
+        document.addEventListener("mousedown", () => {
+          document.body.classList.remove("keyboard-navigation");
+        });
+      });
+    </script>
+  </body>
+</html>
